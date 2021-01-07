@@ -7,6 +7,10 @@ namespace Shirokovnv\ModelReflection;
 use Shirokovnv\ModelReflection\Interfaces\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * Class ReflectedModel
+ * @package Shirokovnv\ModelReflection
+ */
 class ReflectedModel implements \JsonSerializable, Arrayable
 {
     public $name;
