@@ -10,7 +10,12 @@
         }
     ],
     "homepage": "https://github.com/shirokovnv/model-reflection",
-    "keywords": ["Laravel", "ModelReflection", "php", "reflection"],
+    "keywords": [
+        "Laravel",
+        "ModelReflection",
+        "php",
+        "reflection"
+    ],
     "require": {
         "illuminate/support": "~5|~6|~7|~8",
         "doctrine/dbal": "~2.10"

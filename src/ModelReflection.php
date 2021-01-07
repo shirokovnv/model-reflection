@@ -2,6 +2,10 @@
 
 namespace Shirokovnv\ModelReflection;
 
+use Illuminate\Support\Collection;
+use Shirokovnv\ModelReflection\Components\FieldRef;
+use Shirokovnv\ModelReflection\Components\FkeyRef;
+use Shirokovnv\ModelReflection\Components\RelationRef;
 use Shirokovnv\ModelReflection\Exceptions\UnknownRelTypeException;
 use ReflectionClass;
 use ReflectionMethod;
@@ -30,16 +34,18 @@ class ModelReflection
      * ModelReflection constructor.
      * @param $conn
      */
-    function __construct($conn) {
+    function __construct($conn)
+    {
         $this->conn = $conn;
 
         $this->db_schema = $this->conn->getDoctrineSchemaManager();
         $this->initRelationTypeMap();
     }
 
-    private function initRelationTypeMap() {
+    private function initRelationTypeMap()
+    {
         $this->rel_type_map = [
-            'BelongsToMany' => function($relation) {
+            'BelongsToMany' => function ($relation) {
                 return [
                     'keys' => [
                         'relatedPivotKey' => $relation->getRelatedPivotKeyName(),
@@ -75,6 +81,15 @@ class ModelReflection
                 ];
             },
 
+            'MorphTo' => function ($relation) {
+                return [
+                    'keys' => [
+                        'foreignKey' => $relation->getForeignKeyName(),
+                        'morphType' => $relation->getMorphType()
+                    ]
+                ];
+            },
+
             'MorphOne' => function ($relation) {
                 return [
                     'keys' => [
@@ -106,9 +121,48 @@ class ModelReflection
                         'morphClass' => $relation->getMorphClass()
                     ]
                 ];
+            },
+
+            'HasOneThrough' => function ($relation) {
+                return [
+                    'keys' => [
+                        'firstKey' => $relation->getFirstKeyName(),
+                        'secondKey' => $relation->getSecondLocalKeyName(),
+                        'localKey' => $relation->getLocalKeyName(),
+                        'foreignKey' => $relation->getForeignKeyName()
+                    ]
+                ];
+            },
+
+            'HasManyThrough' => function ($relation) {
+                return [
+                    'keys' => [
+                        'firstKey' => $relation->getFirstKeyName(),
+                        'secondKey' => $relation->getSecondLocalKeyName(),
+                        'localKey' => $relation->getLocalKeyName(),
+                        'foreignKey' => $relation->getForeignKeyName()
+                    ]
+                ];
             }
 
         ];
+    }
+
+    public function make(string $model_class_name)
+    {
+        $table_name = $this->getModelTable($model_class_name);
+
+        $fields = $this->getModelFields($model_class_name);
+        $relations = $this->getModelRelations($model_class_name);
+        $foreign_keys = $this->getForeignKeys($table_name);
+
+        return new ReflectedModel(
+            $model_class_name,
+            $table_name,
+            $fields,
+            $relations,
+            $foreign_keys
+        );
     }
 
     /**
@@ -119,55 +173,59 @@ class ModelReflection
      */
     public function getModelSchema(string $model_class_name)
     {
-        $table_name = $this->getModelTable($model_class_name);
-
-        $columns = $this->getColumns($table_name);
-        $relations = $this->getModelRelations($model_class_name);
-        $hidden = $this->getModelHidden($model_class_name);
-        $foreign_keys = $this->getForeignKeys($table_name);
-
-        $json_schema = [];
-        $fields = [];
-        foreach ($columns as $column)
-        {
-            $key = $column->getName();
-
-            $fields[$key] = [
-                'type' => $this->getBaseType($column->getType()->getName()),
-                'label' => $column->getComment() ?? $key,
-                'fillable' => with(new $model_class_name)->isFillable($key),
-                'guarded' => with(new $model_class_name)->isGuarded($key),
-                'hidden' => (in_array($key, $hidden)),
-                'required' => $column->getNotnull(),
-                'default' => $column->getDefault()
-            ];
-
-        }
-        $json_schema['name'] = $model_class_name;
-        $json_schema['table_name'] = $table_name;
-        $json_schema['relations'] = $relations;
-        $json_schema['fields'] = $fields;
-        $json_schema['foreign_keys'] = $foreign_keys;
-
-        return $json_schema;
+        $reflection = $this->make($model_class_name);
+        return $reflection->toArray();
     }
 
     /**
      * @param string $model_class_name
-     * @return array
+     * @return Collection
+     */
+    private function getModelFields(string $model_class_name)
+    {
+
+        $table_name = $this->getModelTable($model_class_name);
+        $columns = $this->getColumns($table_name);
+        $hidden = $this->getModelHidden($model_class_name);
+
+        $fields = new Collection([]);
+
+        foreach ($columns as $column) {
+            $key = $column->getName();
+
+            $fields->push(
+                new FieldRef(
+                    $key,
+                    $this->getBaseType($column->getType()->getName()),
+                    $column->getComment() ?? $key,
+                    with(new $model_class_name)->isFillable($key),
+                    with(new $model_class_name)->isGuarded($key),
+                    (in_array($key, $hidden)),
+                    $column->getNotnull(),
+                    $column->getDefault()
+                )
+            );
+        }
+
+        return $fields;
+    }
+
+    /**
+     * @param string $model_class_name
+     * @return Collection
      * @throws UnknownRelTypeException
      * @throws \ReflectionException
      */
-    private function getModelRelations(string $model_class_name) {
+    private function getModelRelations(string $model_class_name)
+    {
 
         $model = new $model_class_name;
 
-        $relations = [];
+        $relations = new Collection([]);
 
         $methods = (new ReflectionClass($model))->getMethods(ReflectionMethod::IS_PUBLIC);
 
-        foreach($methods as $method)
-        {
+        foreach ($methods as $method) {
             if ($method->class != get_class($model) ||
                 !empty($method->getParameters()) ||
                 $method->getName() == __FUNCTION__) {
@@ -176,24 +234,30 @@ class ModelReflection
 
             try {
                 $result = $method->invoke($model);
-                $rel_type = config('model-reflection.base_eloquent_rel_type');
+                $base_rel_class = config('model-reflection.base_eloquent_rel_class');
 
-                if ($result instanceof $rel_type) {
-                    $relation = [
-                        'type' => (new ReflectionClass($result))->getShortName(),
-                        'model' => (new ReflectionClass($result->getRelated()))->getName()
-                    ];
+                if ($result instanceof $base_rel_class) {
 
-                    if (!array_key_exists($relation['type'], $this->rel_type_map)) {
-                        throw new UnknownRelTypeException($relation['type']);
+                    $rel_type = (new ReflectionClass($result))->getShortName();
+                    if (!array_key_exists($rel_type, $this->rel_type_map)) {
+                        throw new UnknownRelTypeException($rel_type);
                     }
 
-                    $meta = $this->rel_type_map[$relation['type']]($result);
-                    $relation['keys'] = $meta['keys'];
+                    $meta = $this->rel_type_map[$rel_type]($result);
 
-                    $relations[$method->getName()] = $relation;
+                    $relation =
+                        new RelationRef(
+                            $method->getName(),
+                            $rel_type,
+                            (new ReflectionClass($result->getParent()))->getName(),
+                            (new ReflectionClass($result->getRelated()))->getName(),
+                            $meta['keys']
+                        );
+
+                    $relations->push($relation);
                 }
-            } catch(ErrorException $e) {}
+            } catch (ErrorException $e) {
+            }
         }
 
         return $relations;
@@ -203,7 +267,8 @@ class ModelReflection
      * @param string $model_class_name
      * @return mixed
      */
-    private function getModelTable(string $model_class_name) {
+    private function getModelTable(string $model_class_name)
+    {
         return with(new $model_class_name)->getTable();
     }
 
@@ -211,26 +276,30 @@ class ModelReflection
      * @param $model_class_name
      * @return mixed
      */
-    private function getModelHidden($model_class_name) {
+    private function getModelHidden($model_class_name)
+    {
         return with(new $model_class_name)->getHidden();
     }
 
     /**
      * @param string $table_name
-     * @return array
+     * @return Collection
      */
-    private function getForeignKeys(string $table_name) {
+    private function getForeignKeys(string $table_name)
+    {
         $foreign_keys = $this->db_schema->listTableForeignKeys($table_name);
 
-        $result = [];
+        $result = new Collection([]);
         foreach ($foreign_keys as $fkey) {
 
             $key_name = $fkey->getColumns()[0];
-            $result[$key_name] =
-                [
-                    'foreign_table' => $fkey->getForeignTableName(),
-                    'references' => $fkey->getForeignColumns()[0]
-                ];
+            $result->push(
+                new FkeyRef(
+                    $key_name,
+                    $fkey->getForeignTableName(),
+                    $fkey->getForeignColumns()[0]
+                )
+            );
 
         }
 
@@ -241,7 +310,8 @@ class ModelReflection
      * @param string $table_name
      * @return mixed
      */
-    private function getColumns(string $table_name) {
+    private function getColumns(string $table_name)
+    {
         return $this->db_schema->listTableColumns($table_name);
     }
 
@@ -251,10 +321,13 @@ class ModelReflection
      */
     private function getBaseType(string $db_type)
     {
-        switch ($db_type)
-        {
-            case 'bigint': return 'integer'; break;
-            default: return $db_type; break;
+        switch ($db_type) {
+            case 'bigint':
+                return 'integer';
+                break;
+            default:
+                return $db_type;
+                break;
         }
     }
 

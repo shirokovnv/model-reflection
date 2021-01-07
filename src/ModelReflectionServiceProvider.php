@@ -27,7 +27,7 @@ class ModelReflectionServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/model-reflection.php', 'model-reflection');
+        $this->mergeConfigFrom(__DIR__ . '/../config/model-reflection.php', 'model-reflection');
 
         // Register the service the package provides.
         $this->app->singleton('model-reflection', function ($app) {
@@ -54,7 +54,7 @@ class ModelReflectionServiceProvider extends ServiceProvider
     {
         // Publishing the configuration file.
         $this->publishes([
-            __DIR__.'/../config/model-reflection.php' => config_path('model-reflection.php'),
+            __DIR__ . '/../config/model-reflection.php' => config_path('model-reflection.php'),
         ], 'model-reflection.config');
 
     }
