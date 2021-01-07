@@ -22,9 +22,22 @@ This package is based on Doctrine/DBAL
 Once installed you can do stuff like this:
 
 ```php
+    $user_reflection = ModelReflection::make('App\User');
+```
+
+this will return ReflectedModel containing information about:
+- class name
+- table name
+- fields
+- relations
+- table foreign keys
+
+or you can do: 
+
+```php
 $user_schema = ModelReflection::getModelSchema('App\User');
 ```
-this will return an associative array containing user introspection data.
+this will return an associative array for JSON representation.
 
 ## Change log
 
