@@ -13,10 +13,25 @@ use Illuminate\Support\Collection;
  */
 class ReflectedModel implements \JsonSerializable, Arrayable
 {
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $table_name;
+    /**
+     * @var Collection
+     */
     public $fields;
+    /**
+     * @var Collection
+     */
     public $relations;
+    /**
+     * @var Collection
+     */
     public $foreign_keys;
 
     public function __construct(
