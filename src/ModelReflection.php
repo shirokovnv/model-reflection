@@ -3,6 +3,7 @@
 namespace Shirokovnv\ModelReflection;
 
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Shirokovnv\ModelReflection\Components\FieldRef;
 use Shirokovnv\ModelReflection\Components\FkeyRef;
 use Shirokovnv\ModelReflection\Components\RelationRef;
@@ -234,9 +235,8 @@ class ModelReflection
 
             try {
                 $result = $method->invoke($model);
-                $base_rel_class = config('model-reflection.base_eloquent_rel_class');
 
-                if ($result instanceof $base_rel_class) {
+                if ($result instanceof Relation) {
 
                     $rel_type = (new ReflectionClass($result))->getShortName();
                     if (!array_key_exists($rel_type, $this->rel_type_map)) {
