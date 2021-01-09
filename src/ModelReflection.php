@@ -333,12 +333,14 @@ class ModelReflection
             $scope_args = new Collection([]);
 
             foreach ($params as $param) {
+                $reflected_type = $param->getType() ? $param->getType()->getName() : null;
+
                 $scope_args->push(
                     new ScopeArgRef(
                         $param->getName(),
                         $param->getPosition(),
                         $param->isOptional(),
-                        $param->getType()
+                        $reflected_type
                     )
                 );
             }
