@@ -2,6 +2,13 @@
 
 All notable changes to `ModelReflection` will be documented in this file.
 
+## Version 2.1.0
+- Added information about model scopes
+- Fixed dependencies
+
+## Version 2.0.1
+- Fixed copyright
+
 ## Version 2.0
 
 ### Added

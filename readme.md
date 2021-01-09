@@ -31,6 +31,7 @@ this will return ReflectedModel containing information about:
 - fields
 - relations
 - table foreign keys
+- scopes
 
 or you can do: 
 

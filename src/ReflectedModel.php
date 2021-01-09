@@ -4,7 +4,7 @@
 namespace Shirokovnv\ModelReflection;
 
 
-use Shirokovnv\ModelReflection\Interfaces\Arrayable;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
 /**
@@ -33,13 +33,18 @@ class ReflectedModel implements \JsonSerializable, Arrayable
      * @var Collection
      */
     public $foreign_keys;
+    /**
+     * @var Collection
+     */
+    public $scopes;
 
     public function __construct(
         string $name,
         string $table_name,
         Collection $fields,
         Collection $relations,
-        Collection $foreign_keys
+        Collection $foreign_keys,
+        Collection $scopes
     )
     {
         $this->name = $name;
@@ -47,6 +52,7 @@ class ReflectedModel implements \JsonSerializable, Arrayable
         $this->fields = $fields;
         $this->relations = $relations;
         $this->foreign_keys = $foreign_keys;
+        $this->scopes = $scopes;
     }
 
     public function toArray()
@@ -67,7 +73,12 @@ class ReflectedModel implements \JsonSerializable, Arrayable
 
             'foreign_keys' => $this->foreign_keys->map(function ($fkey) {
                 return $fkey->toArray();
+            })->toArray(),
+
+            'scopes' => $this->scopes->map(function ($scope) {
+                return $scope->toArray();
             })->toArray()
+
         ];
 
     }

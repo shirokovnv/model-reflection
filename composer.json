@@ -17,7 +17,8 @@
         "reflection"
     ],
     "require": {
-        "illuminate/support": "~5|~6|~7|~8",
+        "illuminate/support": "~5.8|~6|~7|~8",
+        "illuminate/contracts": "~5.8|~6|~7|~8",
         "illuminate/database": "^5.8|^6.0|^7.0|^8.0",
         "doctrine/dbal": "~2.10"
     },

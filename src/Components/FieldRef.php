@@ -4,7 +4,7 @@
 namespace Shirokovnv\ModelReflection\Components;
 
 
-use Shirokovnv\ModelReflection\Interfaces\Arrayable;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * Class FieldRef

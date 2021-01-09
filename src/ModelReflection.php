@@ -4,9 +4,12 @@ namespace Shirokovnv\ModelReflection;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Str;
 use Shirokovnv\ModelReflection\Components\FieldRef;
 use Shirokovnv\ModelReflection\Components\FkeyRef;
 use Shirokovnv\ModelReflection\Components\RelationRef;
+use Shirokovnv\ModelReflection\Components\ScopeArgRef;
+use Shirokovnv\ModelReflection\Components\ScopeRef;
 use Shirokovnv\ModelReflection\Exceptions\UnknownRelTypeException;
 use ReflectionClass;
 use ReflectionMethod;
@@ -156,13 +159,15 @@ class ModelReflection
         $fields = $this->getModelFields($model_class_name);
         $relations = $this->getModelRelations($model_class_name);
         $foreign_keys = $this->getForeignKeys($table_name);
+        $scopes = $this->getModelScopes($model_class_name);
 
         return new ReflectedModel(
             $model_class_name,
             $table_name,
             $fields,
             $relations,
-            $foreign_keys
+            $foreign_keys,
+            $scopes
         );
     }
 
@@ -304,6 +309,51 @@ class ModelReflection
         }
 
         return $result;
+    }
+
+
+    /**
+     * @param string $model_class_name
+     * @return Collection
+     * @throws \ReflectionException
+     */
+    private function getModelScopes(string $model_class_name) {
+        $class_methods = collect(get_class_methods($model_class_name));
+        $scope_method_names = $class_methods->filter(function($method) {
+            return Str::startsWith($method, 'scope');
+        });
+
+        $scope_collection = new Collection([]);
+
+        foreach($scope_method_names as $scope_method_name) {
+
+            $reflection = new ReflectionClass($model_class_name);
+            $params = $reflection->getMethod($scope_method_name)->getParameters();
+            $scope_name = Str::replaceFirst('scope', '', $scope_method_name);
+            $scope_args = new Collection([]);
+
+            foreach ($params as $param) {
+                $scope_args->push(
+                    new ScopeArgRef(
+                        $param->getName(),
+                        $param->getPosition(),
+                        $param->isOptional(),
+                        $param->getType()
+                    )
+                );
+            }
+
+            $scope_collection->push(
+                new ScopeRef(
+                    $scope_name,
+                    $scope_args
+                )
+            );
+
+        }
+
+        return $scope_collection;
+
     }
 
     /**
