@@ -2,6 +2,9 @@
 
 All notable changes to `ModelReflection` will be documented in this file.
 
+## Version 2.2.0
+- Fixed typeHint casting to string 
+
 ## Version 2.1.0
 - Added information about model scopes
 - Fixed dependencies
