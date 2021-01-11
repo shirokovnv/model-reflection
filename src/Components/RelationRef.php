@@ -31,12 +31,22 @@ class RelationRef implements \JsonSerializable, Arrayable
      * @var array
      */
     public $keys;
+    /**
+     * @var string
+     */
+    public $related_class_name;
+    /**
+     * @var string
+     */
+    public $parent_class_name;
 
     public function __construct(string $name,
                                 string $type,
                                 string $parent,
                                 string $related,
-                                array $keys
+                                array $keys,
+                                string $related_class_name,
+                                string $parent_class_name
     )
     {
 
@@ -45,6 +55,8 @@ class RelationRef implements \JsonSerializable, Arrayable
         $this->parent = $parent;
         $this->related = $related;
         $this->keys = $keys;
+        $this->related_class_name = $related_class_name;
+        $this->parent_class_name = $parent_class_name;
 
     }
 
@@ -56,6 +68,8 @@ class RelationRef implements \JsonSerializable, Arrayable
             'parent' => $this->parent,
             'related' => $this->related,
             'keys' => $this->keys,
+            'related_class_name' => $this->related_class_name,
+            'parent_class_name' => $this->parent_class_name
         ];
     }
 

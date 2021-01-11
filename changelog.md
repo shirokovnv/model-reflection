@@ -2,6 +2,9 @@
 
 All notable changes to `ModelReflection` will be documented in this file.
 
+## Version 2.3.0
+- Added "related_class_name" and "parent_class_name" for relations
+
 ## Version 2.2.0
 - Fixed typeHint casting to string 
 

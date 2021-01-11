@@ -256,7 +256,9 @@ class ModelReflection
                             $rel_type,
                             (new ReflectionClass($result->getParent()))->getName(),
                             (new ReflectionClass($result->getRelated()))->getName(),
-                            $meta['keys']
+                            $meta['keys'],
+                            get_class($result->getRelated()),
+                            get_class($result->getParent())
                         );
 
                     $relations->push($relation);
