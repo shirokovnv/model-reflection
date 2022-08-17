@@ -36,7 +36,7 @@ this will return ReflectedModel containing information about:
 or you can do: 
 
 ```php
-$user_schema = ModelReflection::getModelSchema('App\User');
+    $user_schema->toArray();
 ```
 this will return an associative array for JSON representation.
 
