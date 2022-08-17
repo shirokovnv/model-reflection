@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shirokovnv\ModelReflection;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\ServiceProvider;
 
 class ModelReflectionServiceProvider extends ServiceProvider
 {
@@ -38,9 +40,9 @@ class ModelReflectionServiceProvider extends ServiceProvider
     /**
      * Get the services provided by the provider.
      *
-     * @return array
+     * @return array<string>
      */
-    public function provides()
+    public function provides(): array
     {
         return ['model-reflection'];
     }
@@ -56,6 +58,5 @@ class ModelReflectionServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/model-reflection.php' => config_path('model-reflection.php'),
         ], 'model-reflection.config');
-
     }
 }

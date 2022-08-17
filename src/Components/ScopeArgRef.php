@@ -1,25 +1,23 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Shirokovnv\ModelReflection\Components;
 
-
 use Illuminate\Contracts\Support\Arrayable;
 
-/**
- * Class ScopeArgRef
- * @package Shirokovnv\ModelReflection\Components
- */
 class ScopeArgRef implements \JsonSerializable, Arrayable
 {
     /**
      * @var string
      */
-    public $name;
+    public string $name;
+
     /**
      * @var int
      */
-    public $position;
+    public int $position;
+
     /**
      * @var mixed|null
      */
@@ -28,27 +26,40 @@ class ScopeArgRef implements \JsonSerializable, Arrayable
     /**
      * @var bool
      */
-    public $isOptional;
+    public bool $is_optional;
 
-    public function __construct(string $name, int $position, $isOptional, $typeHint = null) {
+    /**
+     * @param string $name
+     * @param int $position
+     * @param bool $is_optional
+     * @param mixed|null $typeHint
+     */
+    public function __construct(string $name, int $position, bool $is_optional, $typeHint = null)
+    {
         $this->name = $name;
         $this->position = $position;
-        $this->isOptional = $isOptional;
+        $this->is_optional = $is_optional;
         $this->typeHint = $typeHint;
     }
 
-    public function toArray()
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
     {
         return [
             'name' => $this->name,
-            'isOptional' => $this->isOptional,
+            'isOptional' => $this->is_optional,
             'position' => $this->position,
-            'typeHint' => $this->typeHint
+            'typeHint' => $this->typeHint,
         ];
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
-        $this->toArray();
+        return $this->toArray();
     }
 }

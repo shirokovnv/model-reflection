@@ -1,50 +1,63 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Shirokovnv\ModelReflection\Components;
 
-
 use Illuminate\Contracts\Support\Arrayable;
 
-/**
- * Class FieldRef
- * @package Shirokovnv\ModelReflection\Components
- */
 class FieldRef implements \JsonSerializable, Arrayable
 {
     /**
      * @var string
      */
-    public $name;
-    /**
-     * @var string
-     */
-    public $type;
-    /**
-     * @var string
-     */
-    public $label;
-    /**
-     * @var bool
-     */
-    public $fillable;
-    /**
-     * @var bool
-     */
-    public $guarded;
-    /**
-     * @var bool
-     */
-    public $hidden;
-    /**
-     * @var bool
-     */
-    public $required;
-    /**
-     * @var mixed
-     */
-    public $default;
+    public string $name;
 
+    /**
+     * @var string
+     */
+    public string $type;
+
+    /**
+     * @var string
+     */
+    public string $label;
+
+    /**
+     * @var bool
+     */
+    public bool $fillable;
+
+    /**
+     * @var bool
+     */
+    public bool $guarded;
+
+    /**
+     * @var bool
+     */
+    public bool $hidden;
+
+    /**
+     * @var bool
+     */
+    public bool $required;
+
+    /**
+     * @var string|null
+     */
+    public ?string $default;
+
+    /**
+     * @param string $name
+     * @param string $type
+     * @param string $label
+     * @param bool $fillable
+     * @param bool $guarded
+     * @param bool $hidden
+     * @param bool $required
+     * @param string|null $default
+     */
     public function __construct(
         string $name,
         string $type,
@@ -53,9 +66,8 @@ class FieldRef implements \JsonSerializable, Arrayable
         bool $guarded,
         bool $hidden,
         bool $required,
-        $default
-    )
-    {
+        ?string $default
+    ) {
         $this->name = $name;
         $this->type = $type;
         $this->label = $label;
@@ -66,7 +78,10 @@ class FieldRef implements \JsonSerializable, Arrayable
         $this->default = $default;
     }
 
-    public function toArray()
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
     {
         return [
             'name' => $this->name,
@@ -76,11 +91,14 @@ class FieldRef implements \JsonSerializable, Arrayable
             'guarded' => $this->guarded,
             'hidden' => $this->hidden,
             'required' => $this->required,
-            'default' => $this->default
+            'default' => $this->default,
         ];
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

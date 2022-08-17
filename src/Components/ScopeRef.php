@@ -1,41 +1,53 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Shirokovnv\ModelReflection\Components;
 
-
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
 
-/**
- * Class ScopeRef
- * @package Shirokovnv\ModelReflection\Components
- */
 class ScopeRef implements \JsonSerializable, Arrayable
 {
     /**
      * @var string
      */
-    public $name;
-    /**
-     * @var Collection
-     */
-    public $args;
+    public string $name;
 
-    public function __construct(string $name, Collection $args) {
+    /**
+     * @var Collection<ScopeArgRef>
+     */
+    public Collection $args;
+
+    /**
+     * @param string $name
+     * @param Collection<ScopeArgRef> $args
+     */
+    public function __construct(string $name, Collection $args)
+    {
         $this->name = $name;
         $this->args = $args;
     }
 
-    public function toArray()
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
     {
         return [
             'name' => $this->name,
-            'args' => $this->args->map(function ($arg) { return $arg->toArray(); })->toArray()
+            'args' => $this->args->map(
+                static function (ScopeArgRef $arg): array {
+                return $arg->toArray();
+            }
+            )->toArray(),
         ];
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

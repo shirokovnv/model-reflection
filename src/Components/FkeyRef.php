@@ -1,40 +1,48 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Shirokovnv\ModelReflection\Components;
 
-
 use Illuminate\Contracts\Support\Arrayable;
 
-/**
- * Class FkeyRef
- * @package Shirokovnv\ModelReflection\Components
- */
 class FkeyRef implements \JsonSerializable, Arrayable
 {
     /**
      * @var string
      */
-    public $name;
-    /**
-     * @var string
-     */
-    public $foreign_table;
-    /**
-     * @var string
-     */
-    public $references;
+    public string $name;
 
-    public function __construct(string $name,
-                                string $foreign_table,
-                                string $references)
+    /**
+     * @var string
+     */
+    public string $foreign_table;
+
+    /**
+     * @var string
+     */
+    public string $references;
+
+    /**
+     * @param string $name
+     * @param string $foreign_table
+     * @param string $references
+     */
+    public function __construct(
+        string $name,
+        string $foreign_table,
+        string $references
+    )
     {
         $this->name = $name;
         $this->foreign_table = $foreign_table;
         $this->references = $references;
     }
 
-    public function toArray()
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
     {
         return [
             'name' => $this->name,
@@ -43,10 +51,11 @@ class FkeyRef implements \JsonSerializable, Arrayable
         ];
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }
-
-
 }

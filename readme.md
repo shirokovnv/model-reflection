@@ -22,7 +22,7 @@ This package is based on Doctrine/DBAL
 Once installed you can do stuff like this:
 
 ```php
-    $user_reflection = ModelReflection::make('App\User');
+    $user_schema = ModelReflection::make(\App\Models\User::class);
 ```
 
 this will return ReflectedModel containing information about:
@@ -36,7 +36,7 @@ this will return ReflectedModel containing information about:
 or you can do: 
 
 ```php
-$user_schema = ModelReflection::getModelSchema('App\User');
+    $user_schema->toArray();
 ```
 this will return an associative array for JSON representation.
 
