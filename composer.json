@@ -12,19 +12,23 @@
     "homepage": "https://github.com/shirokovnv/model-reflection",
     "keywords": [
         "Laravel",
-        "ModelReflection",
+        "eloquent",
         "php",
         "reflection"
     ],
     "require": {
-        "illuminate/support": "~5.8|~6|~7|~8",
-        "illuminate/contracts": "~5.8|~6|~7|~8",
-        "illuminate/database": "^5.8|^6.0|^7.0|^8.0",
-        "doctrine/dbal": "~2.10"
+        "php": "^7.4|^8.0",
+        "ext-json": "*",
+        "illuminate/support": "~5.8|~6|~7|~8|~9",
+        "illuminate/contracts": "~5.8|~6|~7|~8|~9",
+        "illuminate/database": "^5.8|^6.0|^7.0|^8.0|^9.0",
+        "doctrine/dbal": "~2.10|~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~9.0",
-        "orchestra/testbench": "~5|~6"
+        "orchestra/testbench": "~5|~6|~7",
+        "phpstan/phpstan": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.9"
     },
     "autoload": {
         "psr-4": {
@@ -35,6 +39,20 @@
         "psr-4": {
             "Shirokovnv\\ModelReflection\\Tests\\": "tests"
         }
+    },
+    "scripts": {
+        "test": [
+            "./vendor/bin/phpunit"
+        ],
+        "phpstan": [
+            "./vendor/bin/phpstan analyze -c ./phpstan.neon --no-progress --ansi"
+        ],
+        "sniff": [
+            "./vendor/bin/php-cs-fixer fix -vvv --dry-run --show-progress=dots"
+        ],
+        "lint": [
+            "./vendor/bin/php-cs-fixer fix -vvv --show-progress=dots"
+        ]
     },
     "extra": {
         "laravel": {

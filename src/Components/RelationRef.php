@@ -1,55 +1,66 @@
 <?php
 
-namespace Shirokovnv\ModelReflection\Components;
+declare(strict_types=1);
 
+namespace Shirokovnv\ModelReflection\Components;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-/**
- * Class RelationRef
- * @package Shirokovnv\ModelReflection\Components
- */
 class RelationRef implements \JsonSerializable, Arrayable
 {
     /**
      * @var string
      */
-    public $name;
-    /**
-     * @var string
-     */
-    public $type;
-    /**
-     * @var string
-     */
-    public $parent;
-    /**
-     * @var string
-     */
-    public $related;
-    /**
-     * @var array
-     */
-    public $keys;
-    /**
-     * @var string
-     */
-    public $related_class_name;
-    /**
-     * @var string
-     */
-    public $parent_class_name;
+    public string $name;
 
-    public function __construct(string $name,
-                                string $type,
-                                string $parent,
-                                string $related,
-                                array $keys,
-                                string $related_class_name,
-                                string $parent_class_name
-    )
-    {
+    /**
+     * @var string
+     */
+    public string $type;
 
+    /**
+     * @var string
+     */
+    public string $parent;
+
+    /**
+     * @var string
+     */
+    public string $related;
+
+    /**
+     * @var array<string>
+     */
+    public array $keys;
+
+    /**
+     * @var string
+     */
+    public string $related_class_name;
+
+    /**
+     * @var string
+     */
+    public string $parent_class_name;
+
+    /**
+     * @param string $name
+     * @param string $type
+     * @param string $parent
+     * @param string $related
+     * @param array<string> $keys
+     * @param string $related_class_name
+     * @param string $parent_class_name
+     */
+    public function __construct(
+        string $name,
+        string $type,
+        string $parent,
+        string $related,
+        array $keys,
+        string $related_class_name,
+        string $parent_class_name
+    ) {
         $this->name = $name;
         $this->type = $type;
         $this->parent = $parent;
@@ -57,10 +68,12 @@ class RelationRef implements \JsonSerializable, Arrayable
         $this->keys = $keys;
         $this->related_class_name = $related_class_name;
         $this->parent_class_name = $parent_class_name;
-
     }
 
-    public function toArray()
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
     {
         return [
             'name' => $this->name,
@@ -69,13 +82,15 @@ class RelationRef implements \JsonSerializable, Arrayable
             'related' => $this->related,
             'keys' => $this->keys,
             'related_class_name' => $this->related_class_name,
-            'parent_class_name' => $this->parent_class_name
+            'parent_class_name' => $this->parent_class_name,
         ];
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }
-
 }

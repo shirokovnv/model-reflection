@@ -1,20 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shirokovnv\ModelReflection\Exceptions;
 
-use Exception;
-
-class UnknownRelTypeException extends Exception
+class UnknownRelTypeException extends \Exception
 {
-    // Redefine the exception so message isn't optional
-    public function __construct(string $type, $code = 500, Exception $previous = null)
+    /**
+     * @param string $type
+     * @param int $code
+     * @param \Exception|null $previous
+     */
+    public function __construct(string $type, int $code = 500, \Exception $previous = null)
     {
-
-        // make sure everything is assigned properly
         parent::__construct("Relation type $type is not valid", $code, $previous);
     }
 
-    // custom string representation of object
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
