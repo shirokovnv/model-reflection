@@ -1,5 +1,6 @@
 # ModelReflection
 
+![ci.yml][link-ci]
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
 
@@ -68,6 +69,7 @@ MIT. Please see the [license file](license.md) for more information.
 [ico-version]: https://img.shields.io/packagist/v/shirokovnv/model-reflection.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/shirokovnv/model-reflection.svg?style=flat-square
 
+[link-ci]: https://github.com/shirokovnv/model-reflection/actions/workflows/ci.yml/badge.svg
 [link-packagist]: https://packagist.org/packages/shirokovnv/model-reflection
 [link-downloads]: https://packagist.org/packages/shirokovnv/model-reflection
 [link-author]: https://github.com/shirokovnv
