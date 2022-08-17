@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shirokovnv\ModelReflection\Tests\Package;
 
 use Illuminate\Support\Facades\DB;
+use Shirokovnv\ModelReflection\Exceptions\UnknownRelTypeException;
 use Shirokovnv\ModelReflection\ModelReflection;
 use Shirokovnv\ModelReflection\Tests\TestCase;
 
@@ -15,7 +16,7 @@ abstract class ModelReflectionTestCase extends TestCase
      *
      * @throws \Exception
      */
-    public function getReflectionService(): ModelReflection
+    protected function getReflectionService(): ModelReflection
     {
         return new ModelReflection(DB::connection());
     }
@@ -23,7 +24,7 @@ abstract class ModelReflectionTestCase extends TestCase
     /**
      * @return string[]
      */
-    public function getAvailableJsonKeys(): array
+    protected function getAvailableJsonKeys(): array
     {
         return [
             'name',
@@ -33,5 +34,25 @@ abstract class ModelReflectionTestCase extends TestCase
             'foreign_keys',
             'scopes',
         ];
+    }
+
+    /**
+     * @param string $class_name
+     * @return void
+     *
+     * @throws \ReflectionException
+     * @throws UnknownRelTypeException
+     */
+    protected function assertBaseJsonStruct(string $class_name): void
+    {
+        $service = $this->getReflectionService();
+
+        $json_struct = $service->reflect($class_name)->toArray();
+
+        $this->assertIsArray($json_struct);
+
+        foreach ($this->getAvailableJsonKeys() as $key) {
+            $this->assertArrayHasKey($key, $json_struct);
+        }
     }
 }

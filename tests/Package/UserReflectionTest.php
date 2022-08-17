@@ -15,7 +15,7 @@ class UserReflectionTest extends ModelReflectionTestCase
     /**
      * @return void
      */
-    public function testMakeReflection(): void
+    public function testReflectionStruct(): void
     {
         $service = $this->getReflectionService();
 
@@ -39,6 +39,8 @@ class UserReflectionTest extends ModelReflectionTestCase
             $this->assertContains($relation->name, ['posts']);
         }
 
+        $this->assertEquals(0, $reflection->foreign_keys->count());
+
         $this->assertEquals(1, $reflection->scopes->count());
         foreach ($reflection->scopes as $scope) {
             $this->assertInstanceOf(ScopeRef::class, $scope);
@@ -49,17 +51,9 @@ class UserReflectionTest extends ModelReflectionTestCase
     /**
      * @return void
      */
-    public function testJsonSchema(): void
+    public function testJsonStruct(): void
     {
-        $service = $this->getReflectionService();
-
-        $json_schema = $service->reflect(User::class)->toArray();
-
-        $this->assertIsArray($json_schema);
-
-        foreach ($this->getAvailableJsonKeys() as $key) {
-            $this->assertArrayHasKey($key, $json_schema);
-        }
+        $this->assertBaseJsonStruct(User::class);
     }
 
     /**

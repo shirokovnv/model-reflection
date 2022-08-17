@@ -6,7 +6,16 @@ namespace Shirokovnv\ModelReflection\Tests;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string|null $description
+ * @property int|null $user_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 class Post extends Model
 {
     /**
@@ -15,7 +24,7 @@ class Post extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'title', 'description',
+        'title', 'description', 'user_id',
     ];
 
     /**
