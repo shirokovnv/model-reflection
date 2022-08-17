@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
 use Shirokovnv\ModelReflection\ReflectedModel;
 
 /**
- * @method static ReflectedModel make(string $model_class_name)
+ * @method static ReflectedModel reflect(string $model_class_name)
  */
 class ModelReflection extends Facade
 {

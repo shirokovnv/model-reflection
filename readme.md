@@ -22,7 +22,7 @@ This package is based on Doctrine/DBAL
 Once installed you can do stuff like this:
 
 ```php
-    $user_schema = ModelReflection::make(\App\Models\User::class);
+    $user_schema = ModelReflection::reflect(\App\Models\User::class);
 ```
 
 this will return ReflectedModel containing information about:

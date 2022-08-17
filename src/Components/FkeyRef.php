@@ -32,8 +32,7 @@ class FkeyRef implements \JsonSerializable, Arrayable
         string $name,
         string $foreign_table,
         string $references
-    )
-    {
+    ) {
         $this->name = $name;
         $this->foreign_table = $foreign_table;
         $this->references = $references;

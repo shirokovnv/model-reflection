@@ -181,7 +181,7 @@ class ModelReflection
      * @throws UnknownRelTypeException
      * @throws \ReflectionException
      */
-    public function make(string $model_class_name): ReflectedModel
+    public function reflect(string $model_class_name): ReflectedModel
     {
         $table_name = $this->getModelTable($model_class_name);
 

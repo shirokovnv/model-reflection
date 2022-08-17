@@ -38,8 +38,8 @@ class ScopeRef implements \JsonSerializable, Arrayable
             'name' => $this->name,
             'args' => $this->args->map(
                 static function (ScopeArgRef $arg): array {
-                return $arg->toArray();
-            }
+                    return $arg->toArray();
+                }
             )->toArray(),
         ];
     }
