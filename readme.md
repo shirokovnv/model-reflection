@@ -4,7 +4,7 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-The package allows you to reflect properties and methods of the model and save the received information in form of a JSON schema.
+The package allows you to reflect properties and methods of the model and save received information in form of a JSON schema.
 
 ## Installation
 
