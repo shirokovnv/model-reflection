@@ -1,4 +1,4 @@
-name: PHP Composer
+name: CI
 
 on:
   push:
@@ -37,9 +37,6 @@ jobs:
 
     - name: Check format
       run: composer run-script sniff
-
-    - name: PHPStan
-      run: composer run-script phpstan
 
     - name: Run test suite
       run: composer run-script test
