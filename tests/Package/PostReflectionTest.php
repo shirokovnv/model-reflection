@@ -12,6 +12,9 @@ use Shirokovnv\ModelReflection\Tests\Post;
 
 class PostReflectionTest extends ModelReflectionTestCase
 {
+    /**
+     * @return void
+     */
     public function testReflectionStruct(): void
     {
         $service = $this->getReflectionService();
