@@ -325,6 +325,7 @@ class ModelReflection
     {
         $class_methods = new Collection(get_class_methods($model_class_name));
 
+        /** @var Collection<string> $scope_method_names */
         $scope_method_names = $class_methods->filter(static function (string $method): bool {
             return Str::startsWith($method, 'scope');
         });

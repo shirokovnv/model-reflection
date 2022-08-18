@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Shirokovnv\ModelReflection\Tests\Package;
 
 use Illuminate\Support\Facades\DB;
-use Shirokovnv\ModelReflection\Exceptions\UnknownRelTypeException;
+use Shirokovnv\ModelReflection\Exceptions\ReflectionException;
 use Shirokovnv\ModelReflection\ModelReflection;
 use Shirokovnv\ModelReflection\Tests\TestCase;
 
@@ -39,8 +39,7 @@ abstract class ModelReflectionTestCase extends TestCase
     /**
      * @param string $class_name
      *
-     * @throws \ReflectionException
-     * @throws UnknownRelTypeException
+     *@throws \ReflectionException|ReflectionException
      *
      * @return void
      */
