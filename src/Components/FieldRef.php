@@ -83,16 +83,7 @@ class FieldRef implements \JsonSerializable, Arrayable
      */
     public function toArray(): array
     {
-        return [
-            'name' => $this->name,
-            'type' => $this->type,
-            'label' => $this->label,
-            'fillable' => $this->fillable,
-            'guarded' => $this->guarded,
-            'hidden' => $this->hidden,
-            'required' => $this->required,
-            'default' => $this->default,
-        ];
+        return (array) $this;
     }
 
     /**

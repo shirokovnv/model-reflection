@@ -47,12 +47,7 @@ class ScopeArgRef implements \JsonSerializable, Arrayable
      */
     public function toArray(): array
     {
-        return [
-            'name' => $this->name,
-            'isOptional' => $this->is_optional,
-            'position' => $this->position,
-            'typeHint' => $this->typeHint,
-        ];
+        return (array) $this;
     }
 
     /**

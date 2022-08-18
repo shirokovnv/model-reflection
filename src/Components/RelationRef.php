@@ -75,15 +75,7 @@ class RelationRef implements \JsonSerializable, Arrayable
      */
     public function toArray(): array
     {
-        return [
-            'name' => $this->name,
-            'type' => $this->type,
-            'parent' => $this->parent,
-            'related' => $this->related,
-            'keys' => $this->keys,
-            'related_class_name' => $this->related_class_name,
-            'parent_class_name' => $this->parent_class_name,
-        ];
+        return (array) $this;
     }
 
     /**

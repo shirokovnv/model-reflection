@@ -43,11 +43,7 @@ class FkeyRef implements \JsonSerializable, Arrayable
      */
     public function toArray(): array
     {
-        return [
-            'name' => $this->name,
-            'foreign_table' => $this->foreign_table,
-            'references' => $this->references,
-        ];
+        return (array) $this;
     }
 
     /**
