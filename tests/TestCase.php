@@ -10,6 +10,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
 {
     /**
      * @param $app
+     *
      * @return string[]
      */
     protected function getPackageProviders($app): array
@@ -21,6 +22,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     /**
      * @param $app
+     *
      * @return void
      */
     protected function getEnvironmentSetUp($app): void

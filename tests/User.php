@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int $id
- * @property string $name
- * @property string $email
- * @property bool $active
+ * @property int         $id
+ * @property string      $name
+ * @property string      $email
+ * @property bool        $active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -46,7 +46,8 @@ class User extends Model
     /**
      * Scope a query to only include active users.
      *
-     * @param  Builder  $query
+     * @param Builder $query
+     *
      * @return void
      */
     public function scopeActive($query)

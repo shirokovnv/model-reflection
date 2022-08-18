@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int $id
- * @property string $title
+ * @property int         $id
+ * @property string      $title
  * @property string|null $description
- * @property int|null $user_id
+ * @property int|null    $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */

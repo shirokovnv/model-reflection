@@ -7,8 +7,8 @@ namespace Shirokovnv\ModelReflection\Exceptions;
 class UnknownRelTypeException extends \Exception
 {
     /**
-     * @param string $type
-     * @param int $code
+     * @param string          $type
+     * @param int             $code
      * @param \Exception|null $previous
      */
     public function __construct(string $type, int $code = 500, \Exception $previous = null)

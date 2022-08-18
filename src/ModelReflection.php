@@ -52,9 +52,9 @@ class ModelReflection
     }
 
     /**
-     * @return void
-     *
      * @throws \Exception
+     *
+     * @return void
      */
     private function initDoctrineSchemaManager(): void
     {
@@ -176,10 +176,11 @@ class ModelReflection
 
     /**
      * @param string $model_class_name
-     * @return ReflectedModel
      *
      * @throws UnknownRelTypeException
      * @throws \ReflectionException
+     *
+     * @return ReflectedModel
      */
     public function reflect(string $model_class_name): ReflectedModel
     {
@@ -238,10 +239,11 @@ class ModelReflection
 
     /**
      * @param string $model_class_name
-     * @return Collection<RelationRef>
      *
      * @throws UnknownRelTypeException
      * @throws \ReflectionException
+     *
+     * @return Collection<RelationRef>
      */
     private function getModelRelations(string $model_class_name): Collection
     {
@@ -341,10 +343,11 @@ class ModelReflection
 
     /**
      * @param string $model_class_name
-     * @return Collection<ScopeRef>
      *
      * @throws \ReflectionException
      * @throws \Exception
+     *
+     * @return Collection<ScopeRef>
      */
     private function getModelScopes(string $model_class_name): Collection
     {

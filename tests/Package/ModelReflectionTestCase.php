@@ -12,9 +12,9 @@ use Shirokovnv\ModelReflection\Tests\TestCase;
 abstract class ModelReflectionTestCase extends TestCase
 {
     /**
-     * @return ModelReflection
-     *
      * @throws \Exception
+     *
+     * @return ModelReflection
      */
     protected function getReflectionService(): ModelReflection
     {
@@ -38,10 +38,11 @@ abstract class ModelReflectionTestCase extends TestCase
 
     /**
      * @param string $class_name
-     * @return void
      *
      * @throws \ReflectionException
      * @throws UnknownRelTypeException
+     *
+     * @return void
      */
     protected function assertBaseJsonStruct(string $class_name): void
     {

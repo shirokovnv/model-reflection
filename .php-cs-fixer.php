@@ -4,6 +4,7 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 $rules = [
+    '@PSR2' => true,
     'array_syntax' => ['syntax' => 'short'],
     'binary_operator_spaces' => [
         'default' => 'single_space',
@@ -48,13 +49,6 @@ $rules = [
     'method_argument_space' => true,
     'native_function_casing' => true,
     'no_alias_functions' => true,
-    'no_extra_blank_lines' => [
-        'tokens' => [
-            'extra',
-            'throw',
-            'use'
-        ]
-    ],
     'no_blank_lines_after_class_opening' => true,
     'no_blank_lines_after_phpdoc' => true,
     'no_closing_tag' => true,
@@ -90,16 +84,24 @@ $rules = [
     'phpdoc_indent' => true,
     'general_phpdoc_tag_rename' => true,
     'phpdoc_inline_tag_normalizer' => true,
-    'phpdoc_tag_type' => true,
+    'phpdoc_add_missing_param_annotation' => ['only_untyped' => false],
+    'phpdoc_align' => true,
+    'phpdoc_annotation_without_dot' => true,
+    'phpdoc_indent' => true,
+    'phpdoc_inline_tag_normalizer' => true,
+    'phpdoc_order' => true,
+    'phpdoc_separation' => true,
+    'phpdoc_single_line_var_spacing' => true,
+    'phpdoc_summary' => true,
+    'phpdoc_types' => true,
     'phpdoc_no_access' => true,
     'phpdoc_no_package' => true,
     'phpdoc_no_useless_inheritdoc' => true,
+    'phpdoc_return_self_reference' => true,
     'phpdoc_scalar' => true,
-    'phpdoc_single_line_var_spacing' => true,
-    'phpdoc_summary' => true,
-    'phpdoc_to_comment' => true,
+    'phpdoc_to_comment' => false,
     'phpdoc_trim' => true,
-    'phpdoc_types' => true,
+    'phpdoc_types_order' => ['null_adjustment' => 'always_last'],
     'phpdoc_var_without_name' => true,
     'psr_autoloading' => true,
     'self_accessor' => true,

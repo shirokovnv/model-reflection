@@ -49,13 +49,13 @@ class FieldRef implements \JsonSerializable, Arrayable
     public ?string $default;
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param string $label
-     * @param bool $fillable
-     * @param bool $guarded
-     * @param bool $hidden
-     * @param bool $required
+     * @param string      $name
+     * @param string      $type
+     * @param string      $label
+     * @param bool        $fillable
+     * @param bool        $guarded
+     * @param bool        $hidden
+     * @param bool        $required
      * @param string|null $default
      */
     public function __construct(

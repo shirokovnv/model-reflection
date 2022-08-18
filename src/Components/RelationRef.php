@@ -44,13 +44,13 @@ class RelationRef implements \JsonSerializable, Arrayable
     public string $parent_class_name;
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param string $parent
-     * @param string $related
+     * @param string        $name
+     * @param string        $type
+     * @param string        $parent
+     * @param string        $related
      * @param array<string> $keys
-     * @param string $related_class_name
-     * @param string $parent_class_name
+     * @param string        $related_class_name
+     * @param string        $parent_class_name
      */
     public function __construct(
         string $name,

@@ -44,12 +44,12 @@ class ReflectedModel implements \JsonSerializable, Arrayable
     public Collection $scopes;
 
     /**
-     * @param string $name
-     * @param string $table_name
-     * @param Collection<FieldRef> $fields
+     * @param string                  $name
+     * @param string                  $table_name
+     * @param Collection<FieldRef>    $fields
      * @param Collection<RelationRef> $relations
-     * @param Collection<FkeyRef> $foreign_keys
-     * @param Collection<ScopeRef> $scopes
+     * @param Collection<FkeyRef>     $foreign_keys
+     * @param Collection<ScopeRef>    $scopes
      */
     public function __construct(
         string $name,

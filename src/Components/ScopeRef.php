@@ -20,7 +20,7 @@ class ScopeRef implements \JsonSerializable, Arrayable
     public Collection $args;
 
     /**
-     * @param string $name
+     * @param string                  $name
      * @param Collection<ScopeArgRef> $args
      */
     public function __construct(string $name, Collection $args)

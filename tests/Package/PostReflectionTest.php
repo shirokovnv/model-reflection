@@ -49,6 +49,8 @@ class PostReflectionTest extends ModelReflectionTestCase
     }
 
     /**
+     * @param string $class_name
+     *
      * @return void
      */
     public function assertBaseJsonStruct(string $class_name): void

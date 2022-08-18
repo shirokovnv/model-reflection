@@ -29,9 +29,9 @@ class ScopeArgRef implements \JsonSerializable, Arrayable
     public bool $is_optional;
 
     /**
-     * @param string $name
-     * @param int $position
-     * @param bool $is_optional
+     * @param string     $name
+     * @param int        $position
+     * @param bool       $is_optional
      * @param mixed|null $typeHint
      */
     public function __construct(string $name, int $position, bool $is_optional, $typeHint = null)
