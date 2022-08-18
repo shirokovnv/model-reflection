@@ -190,7 +190,7 @@ class ModelReflection
         $table_name = $model->getTable();
 
         $fields = $this->getModelFields($model);
-        $relations = $this->getModelRelations($model_class_name);
+        $relations = $this->getModelRelations($model);
         $foreign_keys = $this->getForeignKeys($table_name);
         $scopes = $this->getModelScopes($model_class_name);
 
@@ -238,16 +238,15 @@ class ModelReflection
     }
 
     /**
-     * @param string $model_class_name
+     * @param Model $model
      *
-     * @throws \ReflectionException|ReflectionException
+     * @throws ReflectionException
+     * @throws \ReflectionException
      *
      * @return Collection<RelationRef>
      */
-    private function getModelRelations(string $model_class_name): Collection
+    private function getModelRelations(Model $model): Collection
     {
-        $model = new $model_class_name;
-
         $relations = new Collection([]);
 
         $methods = (new ReflectionClass($model))->getMethods(ReflectionMethod::IS_PUBLIC);
@@ -385,8 +384,11 @@ class ModelReflection
     private function getBaseType(string $db_type): string
     {
         switch ($db_type) {
+            case 'smallint':
             case 'bigint':
                 return 'integer';
+            case 'decimal':
+                return 'string';
             default:
                 return $db_type;
         }
