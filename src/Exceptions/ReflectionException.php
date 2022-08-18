@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Shirokovnv\ModelReflection\Exceptions;
 
-class UnknownRelTypeException extends \Exception
+class ReflectionException extends \Exception
 {
     /**
-     * @param string          $type
+     * @param string          $message
      * @param int             $code
-     * @param \Exception|null $previous
+     * @param \Throwable|null $previous
      */
-    public function __construct(string $type, int $code = 500, \Exception $previous = null)
+    public function __construct(string $message, int $code = 500, \Throwable $previous = null)
     {
-        parent::__construct("Relation type $type is not valid", $code, $previous);
+        parent::__construct($message, $code, $previous);
     }
 
     /**

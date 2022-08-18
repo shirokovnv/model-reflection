@@ -19,7 +19,8 @@ use Shirokovnv\ModelReflection\Components\FkeyRef;
 use Shirokovnv\ModelReflection\Components\RelationRef;
 use Shirokovnv\ModelReflection\Components\ScopeArgRef;
 use Shirokovnv\ModelReflection\Components\ScopeRef;
-use Shirokovnv\ModelReflection\Exceptions\UnknownRelTypeException;
+use Shirokovnv\ModelReflection\Exceptions\DoctrineSchemaNotFoundException;
+use Shirokovnv\ModelReflection\Exceptions\ReflectionException;
 
 class ModelReflection
 {
@@ -61,7 +62,7 @@ class ModelReflection
         if ($this->conn instanceof Connection) {
             $this->db_schema = $this->conn->getDoctrineSchemaManager();
         } else {
-            throw new \Exception('Cannot initialize doctrine schema manager.');
+            throw new DoctrineSchemaNotFoundException();
         }
     }
 
@@ -177,16 +178,18 @@ class ModelReflection
     /**
      * @param string $model_class_name
      *
-     * @throws UnknownRelTypeException
-     * @throws \ReflectionException
+     * @throws \ReflectionException|ReflectionException
      *
      * @return ReflectedModel
      */
     public function reflect(string $model_class_name): ReflectedModel
     {
-        $table_name = $this->getModelTable($model_class_name);
+        /** @var Model $model */
+        $model = new $model_class_name;
 
-        $fields = $this->getModelFields($model_class_name);
+        $table_name = $model->getTable();
+
+        $fields = $this->getModelFields($model);
         $relations = $this->getModelRelations($model_class_name);
         $foreign_keys = $this->getForeignKeys($table_name);
         $scopes = $this->getModelScopes($model_class_name);
@@ -202,20 +205,17 @@ class ModelReflection
     }
 
     /**
-     * @param string $model_class_name
+     * @param Model $model
      *
      * @return Collection<FieldRef>
      */
-    private function getModelFields(string $model_class_name): Collection
+    private function getModelFields(Model $model): Collection
     {
-        $table_name = $this->getModelTable($model_class_name);
+        $table_name = $model->getTable();
         $columns = $this->getColumns($table_name);
-        $hidden = $this->getModelHidden($model_class_name);
+        $hidden = $model->getHidden();
 
         $fields = new Collection([]);
-
-        /** @var Model $model */
-        $model = new $model_class_name;
 
         foreach ($columns as $column) {
             $key = $column->getName();
@@ -240,8 +240,7 @@ class ModelReflection
     /**
      * @param string $model_class_name
      *
-     * @throws UnknownRelTypeException
-     * @throws \ReflectionException
+     * @throws \ReflectionException|ReflectionException
      *
      * @return Collection<RelationRef>
      */
@@ -266,7 +265,7 @@ class ModelReflection
                 if ($result instanceof Relation) {
                     $rel_type = (new ReflectionClass($result))->getShortName();
                     if (!array_key_exists($rel_type, $this->rel_type_map)) {
-                        throw new UnknownRelTypeException($rel_type);
+                        throw new ReflectionException("Unknown relation type: $rel_type.");
                     }
 
                     $meta = $this->rel_type_map[$rel_type]($result);
@@ -289,32 +288,6 @@ class ModelReflection
         }
 
         return $relations;
-    }
-
-    /**
-     * @param string $model_class_name
-     *
-     * @return string
-     */
-    private function getModelTable(string $model_class_name): string
-    {
-        /** @var Model $model */
-        $model = new $model_class_name;
-
-        return $model->getTable();
-    }
-
-    /**
-     * @param string $model_class_name
-     *
-     * @return string[]
-     */
-    private function getModelHidden(string $model_class_name): array
-    {
-        /** @var Model $model */
-        $model = new $model_class_name;
-
-        return $model->getHidden();
     }
 
     /**
@@ -344,16 +317,14 @@ class ModelReflection
     /**
      * @param string $model_class_name
      *
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws \ReflectionException|ReflectionException
      *
      * @return Collection<ScopeRef>
      */
     private function getModelScopes(string $model_class_name): Collection
     {
-        $class_methods = collect(get_class_methods($model_class_name));
+        $class_methods = new Collection(get_class_methods($model_class_name));
 
-        /** @var Collection<string> $scope_method_names */
         $scope_method_names = $class_methods->filter(static function (string $method): bool {
             return Str::startsWith($method, 'scope');
         });
@@ -362,7 +333,7 @@ class ModelReflection
 
         foreach ($scope_method_names as $scope_method_name) {
             if (!class_exists($model_class_name)) {
-                throw new \Exception("Class $model_class_name does not exist.");
+                throw new ReflectionException("Class $model_class_name does not exist.");
             }
 
             $reflection = new ReflectionClass($model_class_name);
